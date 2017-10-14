@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
 {% block content %}
   {% if current_user.is_admin %}
-    {% for user in users %}
-      {{ user.email }}
-    {% endfor %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>email</th>
+          <th>является ли админом</th>
+          <th>удалить</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td class="user_id">{{user.id}}</td>
+            <td>{{user.email}}</td>
+            <td>{% if user.is_admin %}да{% else %}нет{% endif %}</td>
+            <td><a class="btn btn-danger" href="#"><i class="fa fa-trash-o fa-lg"></i>Удалить</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
     <p class="text-center">Список зарегистрированных пользователей:</p>
     <ul class="list-group">
@@ -15,4 +37,12 @@
   <form class="text-center" action="{{url_for ('logout')}}">
     <button type="submit" class="btn btn-primary">Выйти</button>
   </form>
-{% endblock %} 
+{% endblock %}
+
+{% block js %}
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='js/users.js') }}"></script>
+{% endblock %}

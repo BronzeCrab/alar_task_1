@@ -45,3 +45,11 @@ def logout():
 def users():
     users = User.query.all()
     return render_template('users.html', users=users)
+
+
+@app.route('/delete/<user_id>')
+@login_required
+def delete(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
