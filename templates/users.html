@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-  {% for user in users %}
-    {{ user.email }}
-  {% endfor %}
+  {% if current_user.is_admin %}
+    {% for user in users %}
+      {{ user.email }}
+    {% endfor %}
+  {% else %}
+    <p class="text-center">Список зарегистрированных пользователей:</p>
+    <ul class="list-group">
+      {% for user in users %}
+        <li class="list-group-item">{{user.email}}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form class="text-center" action="{{url_for ('logout')}}">
+    <button type="submit" class="btn btn-primary">Выйти</button>
+  </form>
 {% endblock %} 
