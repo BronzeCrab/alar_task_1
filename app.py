@@ -53,3 +53,38 @@ def delete(user_id):
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
     db.session.commit()
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+
+@app.route('/put/<user_id>')
+@login_required
+def put(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    is_admin = request.args.get('is_admin')
+    if is_admin is not None:
+        user.is_admin = True if is_admin == 'да' else False
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            flash('Ошибка, этот email занят')
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+
+@app.route('/create', methods=['post'])
+@login_required
+def create():
+    user = User(
+        email=request.form['email'],
+        password=request.form['password'],
+        is_admin=request.form['is_admin'])
+    db.session.add(user)
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        flash('Ошибка, этот email занят')
+    users = User.query.all()
+    return render_template('users.html', users=users)

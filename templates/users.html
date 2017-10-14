@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% import 'messages.html' as macro %}
 
 {% block css %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -20,12 +21,39 @@
           <tr>
             <td class="user_id">{{user.id}}</td>
             <td>{{user.email}}</td>
-            <td>{% if user.is_admin %}да{% else %}нет{% endif %}</td>
+            <td>
+              <select class="select">
+                <option {% if user.is_admin %}selected{% endif %}>да</option>
+                <option {% if not user.is_admin %}selected{% endif %}>нет</option>
+              </select>
+            </td>
             <td><a class="btn btn-danger" href="#"><i class="fa fa-trash-o fa-lg"></i>Удалить</a></td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+    <form action="{{url_for ('create')}}" method="post">
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" class="form-control" placeholder="Enter email" required name="email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" placeholder="Password" required name="password">
+      </div>
+      <div class="form-group">
+        <select class="select" name="is_admin">
+          <option>да<option>
+          <option>нет<option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+    {{ macro.messages() }}
+    <form class="text-center" action="{{url_for ('logout')}}">
+      <button type="submit" class="btn btn-primary">Выйти</button>
+    </form>
   {% else %}
     <p class="text-center">Список зарегистрированных пользователей:</p>
     <ul class="list-group">
@@ -34,9 +62,6 @@
       {% endfor %}
     </ul>
   {% endif %}
-  <form class="text-center" action="{{url_for ('logout')}}">
-    <button type="submit" class="btn btn-primary">Выйти</button>
-  </form>
 {% endblock %}
 
 {% block js %}
