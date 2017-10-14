@@ -11,6 +11,6 @@ I. Python/Flask приложение редактирования списка �
 
 ## Как запустить:
 	pip3 insatll -r requirements.txt
-	python3 create_db.ru
+	python3 create_db.py
 	export FLASK_APP=app.py
 	flask run
